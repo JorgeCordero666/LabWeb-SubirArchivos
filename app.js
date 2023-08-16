@@ -1,30 +1,34 @@
-const fileInput = document.getElementById('fileInput');
-const fileInfo = document.getElementById('fileInfo');
-const preview = document.getElementById('preview');
+const express = require('express')
 
-fileInput.addEventListener('change', function(event) {
-  const selectedFile = event.target.files[0];
+const fileUpload = require('express-fileupload')
 
-  if (selectedFile.size > 7 * 1024 * 1024) {
-    fileInfo.innerHTML = `El archivo excede el límite de 7 MB.`;
-    preview.style.display = 'none';
-    return;
-  }
 
-  fileInfo.innerHTML = `
-    Nombre del archivo: ${selectedFile.name}<br>
-    Tipo MIME: ${selectedFile.type}<br>
-    Tamaño: ${selectedFile.size} bytes
-  `;
+const app = express()
 
-  if (selectedFile.type.startsWith('image/')) {
-    preview.style.display = 'block';
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      preview.src = e.target.result;
-    };
-    reader.readAsDataURL(selectedFile);
-  } else {
-    preview.style.display = 'none';
-  }
-});
+
+app.use(fileUpload())
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+  });
+
+app.post('/upload',(req,res) => {
+
+    let EDFile = req.files.file
+
+    EDFile.mv(`./files/${EDFile.name}`,err => {
+
+        if(err) return res.status(500).send({ message : err })
+
+
+        return res.status(200).send({ message : 'Archivo subido' })
+
+    })
+
+})
+
+app.listen(3000,() => console.log('Corriendo'))
+app.get('/favicon.ico', (req, res) => res.status(204));
