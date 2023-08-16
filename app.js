@@ -1,26 +1,44 @@
-const express = require('express')
+const fileInput = document.getElementById('fileInput');
 
-const fileUpload = require('express-fileupload')
+const fileInfo = document.getElementById('fileInfo');
 
-
-const app = express()
-
-
-app.use(fileUpload())
-
-app.post('/upload',(req,res) => {
-
-    let EDFile = req.files.file
-
-    EDFile.mv(`./files/${EDFile.name}`,err => {
-
-        if(err) return res.status(500).send({ message : err })
+const preview = document.getElementById('preview');
 
 
-        return res.status(200).send({ message : 'Archivo subido' })
+fileInput.addEventListener('change', function(event) {
 
-    })
+  const selectedFile = event.target.files[0];
 
-})
 
-app.listen(3000,() => console.log('Corriendo'))
+  fileInfo.innerHTML = `
+
+    Nombre del archivo: ${selectedFile.name}<br>
+
+    Tipo MIME: ${selectedFile.type}<br>
+
+    Tamaño: ${selectedFile.size} bytes
+
+  `;
+
+
+  if (selectedFile.type.startsWith('image/')) {
+
+    preview.style.display = 'block';
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+      preview.src = e.target.result;
+
+    };
+
+    reader.readAsDataURL(selectedFile);
+
+  } else {
+
+    preview.style.display = 'none';
+
+  }
+
+});

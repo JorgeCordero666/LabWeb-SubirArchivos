@@ -1,19 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subir Archivos</title>
-    <link rel="stylesheet" href="styles.css">
+  <title>Ejemplo HTML5 File API</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>LabWeb 10 Jorge Cordero</h1>
-    <form action='http://localhost:3000/upload' method="POST" enctype="multipart/form-data">
-
-        <input type="file" name="file">
-
-        <input type="submit" value="Subir">
-
-    </form>
+ 
+<input type="file" id="fileInput">
+<div id="fileInfo"></div>
+<img id="preview">
+ 
+<script src="app.js"></script>
+ 
 </body>
 </html>
